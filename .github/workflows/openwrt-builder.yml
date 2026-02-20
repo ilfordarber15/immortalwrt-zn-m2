@@ -10,7 +10,7 @@
 # See /LICENSE for more information.
 #
 
-name: OpenWrt Builder
+name: ImmortalWrt ZN-M2 Builder
 
 on:
   repository_dispatch:
