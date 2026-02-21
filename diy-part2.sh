@@ -53,6 +53,9 @@ fi
 # 修改默认 IP
 sed -i 's/192.168.1.1/192.168.20.1/g' package/base-files/files/bin/config_generate
 
+# 设置默认密码为 password
+sed -i '/^root:/c\root:$1$V4UetPzk$CYXluq4wUazHjmCDBCqXF.:0:0:99999:7:::' package/base-files/files/etc/shadow
+
 # Argon 主题 (使用 master 分支适配新版 LuCI)
 rm -rf feeds/luci/themes/luci-theme-argon
 git clone --depth=1 https://github.com/jerrykuku/luci-theme-argon package/luci-theme-argon
