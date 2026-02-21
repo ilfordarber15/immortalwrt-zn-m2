@@ -3,8 +3,8 @@
 # DIY script part 1 (Before Update feeds)
 #
 
-# Add OpenClash feed
-echo 'src-git openclash https://github.com/vernesong/OpenClash;dev' >>feeds.conf.default
+# Add OpenClash feed (使用稳定的 master 分支)
+echo 'src-git openclash https://github.com/vernesong/OpenClash;master' >>feeds.conf.default
 
 # Add iStore feed
 echo 'src-git istore https://github.com/linkease/istore;main' >>feeds.conf.default
