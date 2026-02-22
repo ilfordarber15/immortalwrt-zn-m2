@@ -12,7 +12,8 @@ if [ -f "$SKB_FILE" ]; then
 fi
 
 # 修复 mac80211 补丁 237 应用失败问题
-# backports 6.12.6 中 acpi_amd_wbrf.h 已不存在，删除补丁中对应部分
+# backports 6.12.6 中 minstrel_ht_debugfs.c 已无 .llseek 字段，acpi_amd_wbrf.h 已不存在
+# 只保留 unaligned.h 的修改
 PATCH_FILE="package/kernel/mac80211/patches/build/237-add_kernel_6.12_support.patch"
 if [ -f "$PATCH_FILE" ]; then
     cat > "$PATCH_FILE" << 'PATCH_EOF'
@@ -26,26 +27,6 @@ if [ -f "$PATCH_FILE" ]; then
 
  #if LINUX_VERSION_IS_LESS(5,7,0)
  static inline u32 __get_unaligned_be24(const u8 *p)
---- a/net/mac80211/rc80211_minstrel_ht_debugfs.c
-+++ b/net/mac80211/rc80211_minstrel_ht_debugfs.c
-@@ -187,7 +187,7 @@ static const struct file_operations mins
- 	.open = minstrel_ht_stats_open,
- 	.read = minstrel_stats_read,
- 	.release = minstrel_stats_release,
--	.llseek = no_llseek,
-+	.llseek = noop_llseek,
- };
-
- static char *
-@@ -323,7 +323,7 @@ static const struct file_operations mins
- 	.open = minstrel_ht_stats_csv_open,
- 	.read = minstrel_stats_read,
- 	.release = minstrel_stats_release,
--	.llseek = no_llseek,
-+	.llseek = noop_llseek,
- };
-
- void
 PATCH_EOF
     echo "mac80211 patch 237 fixed OK"
 fi
