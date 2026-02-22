@@ -31,6 +31,15 @@ PATCH_EOF
     echo "mac80211 patch 237 fixed OK"
 fi
 
+# 修复 mac80211 补丁 367 应用失败问题
+# backports 6.12.6 中 net/wireless/core.c 已使用 netns_local，不再有 NETIF_F_NETNS_LOCAL
+# 该 patch 的改动已包含在源码中，直接删除
+PATCH_367="package/kernel/mac80211/patches/subsys/367-wifi-cfg80211-support-kernel-6.12.patch"
+if [ -f "$PATCH_367" ]; then
+    rm -f "$PATCH_367"
+    echo "mac80211 patch 367 removed (already applied in backports 6.12.6)"
+fi
+
 # 修改默认 IP
 sed -i 's/192.168.1.1/192.168.20.1/g' package/base-files/files/bin/config_generate
 
