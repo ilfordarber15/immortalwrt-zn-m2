@@ -16,9 +16,8 @@ on:
   workflow_dispatch:
 
 env:
-  REPO_URL: https://github.com/breeze303/immortalwrt
-  REPO_BRANCH: main
-  REPO_COMMIT: 809a52e897c5e754ffbb8228525f572ec02daf11
+  REPO_URL: https://github.com/immortalwrt/immortalwrt
+  REPO_BRANCH: master
   FEEDS_CONF: feeds.conf.default
   CONFIG_FILE: .config
   DIY_P1_SH: diy-part1.sh
@@ -57,8 +56,6 @@ jobs:
       run: |
         df -hT $PWD
         git clone $REPO_URL -b $REPO_BRANCH openwrt
-        cd openwrt
-        git checkout $REPO_COMMIT
         ln -sf /workdir/openwrt $GITHUB_WORKSPACE/openwrt
 
     - name: Cache dl and ccache
@@ -67,7 +64,7 @@ jobs:
         path: |
           /workdir/openwrt/dl
           ~/.ccache
-        key: ${{ runner.os }}-openwrt-${{ env.REPO_COMMIT }}
+        key: ${{ runner.os }}-openwrt-${{ env.REPO_BRANCH }}
         restore-keys: |
           ${{ runner.os }}-openwrt-
 
@@ -153,7 +150,7 @@ jobs:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       with:
         tag_name: ${{ steps.tag.outputs.release_tag }}
-        body: "ImmortalWrt ZN-M2 firmware built from commit ${{ env.REPO_COMMIT }}"
+        body: "ImmortalWrt ZN-M2 firmware built from official immortalwrt master"
         files: ${{ env.FIRMWARE }}/*
 
     - name: Delete workflow runs
