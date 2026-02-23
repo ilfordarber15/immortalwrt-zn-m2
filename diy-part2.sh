@@ -282,6 +282,7 @@ define Device/zn_m2
   BLOCKSIZE := 128k
   PAGESIZE := 2048
   SOC := ipq6000
+  DEVICE_DTS := ipq6000-zn-m2
   DEVICE_DTS_CONFIG := config@cp03-c1
   DEVICE_PACKAGES := ipq-wifi-zn_m2
 endef
@@ -297,10 +298,11 @@ fi
 # ============================================================
 WIFI_MK="package/firmware/ipq-wifi/Makefile"
 if ! grep -q "zn_m2" "$WIFI_MK"; then
-    # Add to ALLWIFIBOARDS
-    sed -i '/^ALLWIFIPACKAGES/i\\tzn_m2' "$WIFI_MK"
+    # Add to ALLWIFIBOARDS: append \ to last entry and add zn_m2
+    sed -i '/^[[:space:]]*zyxel_scr50axe[[:space:]]*$/s/[[:space:]]*$/ \\/' "$WIFI_MK"
+    sed -i '/zyxel_scr50axe.*\\/a\\tzn_m2' "$WIFI_MK"
     # Add generate-ipq-wifi-package call
-    sed -i '/\$(foreach PACKAGE,\$(ALLWIFIPACKAGES)/i\$(eval $(call generate-ipq-wifi-package,zn_m2,ZN M2))' "$WIFI_MK"
+    sed -i '/generate-ipq-wifi-package,zyxel_scr50axe/a\$(eval $(call generate-ipq-wifi-package,zn_m2,ZN M2))' "$WIFI_MK"
     echo "ZN-M2 WiFi firmware registered"
 else
     echo "ZN-M2 WiFi firmware already registered"
@@ -339,8 +341,9 @@ fi
 # ============================================================
 NETWORK_FILE="target/linux/qualcommax/ipq60xx/base-files/etc/board.d/02_network"
 if ! grep -q "zn,m2" "$NETWORK_FILE"; then
-    # Add zn,m2 to the 3-LAN + WAN case block
-    sed -i '/qihoo,360v6)/i\\tzn,m2|\\' "$NETWORK_FILE"
+    # Add zn,m2 to the 3-LAN + WAN case block (first occurrence only, in ucidef_set_interfaces section)
+    sed -i '0,/qihoo,360v6)/{/qihoo,360v6)/i\\tzn,m2|\\
+}' "$NETWORK_FILE"
     echo "ZN-M2 network config added"
 else
     echo "ZN-M2 network config already exists"
