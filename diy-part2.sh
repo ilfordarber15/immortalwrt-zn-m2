@@ -7,7 +7,8 @@
 # ============================================================
 # a) Create ZN-M2 DTS file
 # ============================================================
-DTS_DIR="target/linux/qualcommax/files/arch/arm64/boot/dts/qcom"
+DTS_DIR="target/linux/qualcommax/dts"
+mkdir -p "$DTS_DIR"
 
 cat > "$DTS_DIR/ipq6000-zn-m2.dts" << 'DTS_EOF'
 // SPDX-License-Identifier: GPL-2.0-or-later OR MIT
