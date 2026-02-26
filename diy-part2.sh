@@ -367,8 +367,8 @@ fi
 # ============================================================
 CALDATA_FILE="target/linux/qualcommax/ipq60xx/base-files/etc/hotplug.d/firmware/11-ath11k-caldata"
 if ! grep -q "zn,m2" "$CALDATA_FILE"; then
-    # Add zn,m2 to the caldata_extract "0:art" block
-    sed -i '/qihoo,360v6/i\\tzn,m2|\\' "$CALDATA_FILE"
+    # Add zn,m2 as its own case block (before qihoo,360v6), only extract caldata without MAC patching
+    sed -i '/qihoo,360v6)/i\\tzn,m2)\n\t\tcaldata_extract "0:art" 0x1000 0x10000\n\t\t;;' "$CALDATA_FILE"
     echo "ZN-M2 caldata hotplug added"
 else
     echo "ZN-M2 caldata hotplug already exists"
